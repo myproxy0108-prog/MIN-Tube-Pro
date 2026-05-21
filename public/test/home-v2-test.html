@@ -2805,18 +2805,12 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
       function closeAiDone() { doneModal.classList.remove('open'); }
       window.closeAiDone = closeAiDone;
 
-      // 「動画を再生」ボタン
       donePlayBtn.addEventListener('click', () => {
         if (!lastAiPlaylist) return;
         openAiPlayerPage(lastAiPlaylist);
       });
 
-      /* ================================================================
-       * ===========  プレイヤーページ (別タブで開く) ==========
-       * ================================================================
-       * /360/動画ID から生の動画ストリームURL(text)を取得し、
-       * <video src="..."> で再生、終了したら自動で次の動画へ
-       */
+
       function openAiPlayerPage(pl) {
         const html = buildPlayerHtml(pl);
         const blob = new Blob([html], { type: 'text/html' });
@@ -2827,7 +2821,7 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
       function buildPlayerHtml(pl) {
         // pl を安全に JSON シリアライズして埋め込む
         const plJson = JSON.stringify(pl).replace(/</g,'\\u003c').replace(/-->/g,'--\\u003e');
-        return [
+return [
 '<!DOCTYPE html>',
 '<html lang="ja"><head><meta charset="utf-8">',
 '<meta name="viewport" content="width=device-width,initial-scale=1">',
@@ -2839,8 +2833,8 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
 '  @media(max-width:960px){.wrap{grid-template-columns:1fr;}}',
 '  .player-side{min-width:0}',
 '  .video-shell{background:#000;border-radius:12px;overflow:hidden;position:relative;aspect-ratio:16/9;}',
-'  video{width:100%;height:100%;display:block;background:#000;}',
-'  .video-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,0.6);font-size:14px;flex-direction:column;gap:10px;}',
+'  #player{width:100%;height:100%;display:block;background:#000;border:none;}',
+'  .video-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,0.6);font-size:14px;flex-direction:column;gap:10px;z-index:10;pointer-events:none;}',
 '  .video-status.hidden{display:none}',
 '  .spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,0.2);border-top-color:#9B72CB;border-radius:50%;animation:sp 1s linear infinite;}',
 '  @keyframes sp{to{transform:rotate(360deg)}}',
@@ -2872,7 +2866,7 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
 '<div class="wrap">',
 '  <div class="player-side">',
 '    <div class="video-shell">',
-'      <video id="vid" controls autoplay playsinline></video>',
+'      <div id="player"></div>',
 '      <div class="video-status" id="vstat"><div class="spinner"></div><div id="vstattxt">動画ストリームを取得中...</div></div>',
 '    </div>',
 '    <div class="now">',
@@ -2898,7 +2892,16 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
 '  let idx = 0;',
 '  let shuffle = false;',
 '  let repeat  = false;',
-'  const vid    = document.getElementById("vid");',
+'  const vid    = new EventTarget();',
+'  let ytPlayer = null;',
+'  let ytApiReady = false;',
+'  (function() {',
+'    const tag = document.createElement("script");',
+'    tag.src = "https://www.youtube.com/iframe_api";',
+'    const firstScriptTag = document.getElementsByTagName("script")[0];',
+'    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);',
+'  })();',
+'  window.onYouTubeIframeAPIReady = function() { ytApiReady = true; };',
 '  const vstat  = document.getElementById("vstat");',
 '  const vstattxt = document.getElementById("vstattxt");',
 '  const nowTitle = document.getElementById("nowTitle");',
@@ -2937,19 +2940,35 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
 '    nowCh.textContent    = it.channel || "";',
 '    renderList();',
 '    showStat("動画ストリームを取得中...");',
+'    if(!ytApiReady || !window.YT || !window.YT.Player){',
+'      setTimeout(loadCurrent, 100);',
+'      return;',
+'    }',
 '    try{',
-'      vid.pause();',
-'      vid.removeAttribute("src");',
-'      vid.load();',
-'      const res = await fetch("/360/" + encodeURIComponent(it.id));',
-'      if(!res.ok) throw new Error("HTTP " + res.status);',
-'      const txt = (await res.text()).trim();',
-'      if(!txt || !/^https?:\\/\\//i.test(txt)){',
-'        throw new Error("ストリームURLを取得できませんでした");',
+'      if(!ytPlayer){',
+'        ytPlayer = new YT.Player("player", {',
+'          height: "100%",',
+'          width: "100%",',
+'          videoId: it.id,',
+'          host: "https://www.youtube-nocookie.com",',
+'          playerVars: {',
+'            "autoplay": 1,',
+'            "controls": 1,',
+'            "playsinline": 1,',
+'            "rel": 0',
+'          },',
+'          events: {',
+'            "onReady": () => { hideStat(); },',
+'            "onStateChange": (e) => {',
+'              if(e.data === YT.PlayerState.ENDED){ vid.dispatchEvent(new Event("ended")); }',
+'            },',
+'            "onError": () => { vid.dispatchEvent(new Event("error")); }',
+'          }',
+'        });',
+'      }else{',
+'        ytPlayer.loadVideoById(it.id);',
+'        hideStat();',
 '      }',
-'      vid.src = txt;',
-'      vid.play().catch(()=>{});',
-'      hideStat();',
 '    }catch(e){',
 '      console.error(e);',
 '      showStat("エラー: " + (e.message||e) + " — 次へスキップします...", true);',
