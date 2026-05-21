@@ -782,6 +782,318 @@
         font-weight: 700;
       }
     }
+
+    /* ===== MIN-Pro-AI Playlist Chip ===== */
+    .chip.chip-ai {
+      background: linear-gradient(120deg, #4f8cff 0%, #a855f7 50%, #ec4899 100%);
+      color: #fff;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.45);
+      animation: aiChipPulse 2.6s ease-in-out infinite;
+    }
+    .chip.chip-ai:hover { background: linear-gradient(120deg, #5b97ff 0%, #b365f8 50%, #f24aa3 100%); }
+    .chip.chip-ai::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+      transform: translateX(-120%);
+      animation: aiChipShine 3.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes aiChipPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.55); }
+      50%      { box-shadow: 0 0 14px 4px rgba(168, 85, 247, 0.0); }
+    }
+    @keyframes aiChipShine {
+      0%   { transform: translateX(-120%); }
+      55%  { transform: translateX(140%); }
+      100% { transform: translateX(140%); }
+    }
+
+    /* ===== AI Modal ===== */
+    .ai-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 4000;
+      padding: 20px;
+    }
+    .ai-modal-overlay.open { display: flex; }
+    .ai-modal {
+      background: var(--surface);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      animation: aiModalIn 0.28s cubic-bezier(.2,.9,.3,1.2);
+    }
+    @keyframes aiModalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+    .ai-modal-header {
+      padding: 18px 20px 12px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ai-modal-header .ai-logo {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: linear-gradient(135deg, #4f8cff, #a855f7, #ec4899);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #fff; font-size: 15px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(168,85,247,0.35);
+    }
+    .ai-modal-title {
+      font-size: 16px; font-weight: 700; color: var(--text); flex: 1;
+    }
+    .ai-modal-close {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ai-modal-close:hover { background: var(--card); color: var(--text); }
+    .ai-modal-body { padding: 18px 20px; overflow-y: auto; }
+    .ai-modal-desc {
+      font-size: 14px; line-height: 1.6; color: var(--text);
+      margin-bottom: 14px;
+    }
+    .ai-modal-sub {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .ai-input {
+      width: 100%; box-sizing: border-box;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .ai-input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.18);
+    }
+    .ai-chip-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 12px 0 6px;
+    }
+    .ai-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .ai-chip:hover { background: var(--border); }
+    .ai-chip.selected {
+      background: linear-gradient(120deg, #4f8cff, #a855f7);
+      border-color: transparent;
+      color: #fff;
+    }
+    .ai-modal-footer {
+      padding: 14px 20px 18px;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 10px; justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .ai-btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: background 0.15s, transform 0.05s;
+    }
+    .ai-btn:hover { background: var(--border); }
+    .ai-btn:active { transform: scale(0.97); }
+    .ai-btn.primary {
+      background: linear-gradient(120deg, #4f8cff, #a855f7, #ec4899);
+      color: #fff;
+      border: none;
+      box-shadow: 0 6px 18px rgba(168,85,247,0.35);
+    }
+    .ai-btn.primary:hover { filter: brightness(1.08); }
+    .ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .ai-choice-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--card);
+    }
+    .ai-choice-card:hover {
+      border-color: #a855f7;
+      background: rgba(168,85,247,0.08);
+      transform: translateY(-1px);
+    }
+    .ai-choice-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, #4f8cff, #a855f7);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .ai-choice-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .ai-choice-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ===== Gemini-style loading ===== */
+    .ai-loader-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 0 4px;
+    }
+    .ai-loader-stars {
+      position: relative; width: 110px; height: 110px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .ai-loader-star {
+      position: absolute;
+      background: linear-gradient(135deg, #4f8cff, #a855f7, #ec4899);
+      -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.39 6.96L21.5 9.27l-5.5 4.73L17.77 21 12 17.27 6.23 21 8 14l-5.5-4.73L9.61 8.96z'/></svg>") center/contain no-repeat;
+              mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.39 6.96L21.5 9.27l-5.5 4.73L17.77 21 12 17.27 6.23 21 8 14l-5.5-4.73L9.61 8.96z'/></svg>") center/contain no-repeat;
+      animation: starPulse 1.8s ease-in-out infinite;
+    }
+    .ai-loader-star.s1 { width: 70px; height: 70px; animation-delay: 0s; }
+    .ai-loader-star.s2 { width: 34px; height: 34px; top: 6px; right: 6px; animation-delay: 0.35s; }
+    .ai-loader-star.s3 { width: 24px; height: 24px; bottom: 10px; left: 8px; animation-delay: 0.7s; }
+    @keyframes starPulse {
+      0%, 100% { transform: scale(0.85) rotate(0deg);   opacity: 0.55; filter: hue-rotate(0deg); }
+      50%      { transform: scale(1.08) rotate(180deg); opacity: 1;    filter: hue-rotate(40deg); }
+    }
+    .ai-loader-text {
+      font-size: 15px; font-weight: 600;
+      background: linear-gradient(110deg, #aaa 20%, #fff 50%, #aaa 80%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+      animation: aiShimmer 2.2s linear infinite;
+      text-align: center;
+      min-height: 22px;
+    }
+    body.light-mode .ai-loader-text {
+      background: linear-gradient(110deg, #555 20%, #000 50%, #555 80%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+    }
+    @keyframes aiShimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .ai-loader-sub {
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 8px; text-align: center;
+    }
+    .ai-loader-progress {
+      width: 100%; max-width: 320px; height: 4px;
+      background: var(--card); border-radius: 4px;
+      overflow: hidden; margin-top: 16px;
+    }
+    .ai-loader-progress-bar {
+      width: 0%; height: 100%;
+      background: linear-gradient(90deg, #4f8cff, #a855f7, #ec4899);
+      transition: width 0.4s ease;
+      border-radius: 4px;
+    }
+
+    /* ===== AI Result success ===== */
+    .ai-result-success {
+      text-align: center; padding: 10px 0 4px;
+    }
+    .ai-result-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      box-shadow: 0 6px 20px rgba(34,197,94,0.35);
+      animation: aiPopIn 0.45s cubic-bezier(.2,.9,.3,1.6);
+    }
+    @keyframes aiPopIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .ai-result-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .ai-result-sub   { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+    .ai-result-list {
+      max-height: 220px; overflow-y: auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .ai-result-item {
+      display: flex; gap: 10px; align-items: center;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .ai-result-item .num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: linear-gradient(135deg, #4f8cff, #a855f7);
+      color: #fff; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ai-result-item .ttl {
+      flex: 1; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .ai-play-btn-big {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(120deg, #4f8cff, #a855f7, #ec4899);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 8px 22px rgba(168,85,247,0.4);
+      transition: transform 0.08s, filter 0.15s;
+    }
+    .ai-play-btn-big:hover { filter: brightness(1.08); }
+    .ai-play-btn-big:active { transform: scale(0.98); }
+
+    .ai-error-box {
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.35);
+      color: #fca5a5;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -967,6 +1279,7 @@
         <button class="chip" data-q="ゲーム">ゲーム</button>
         <button class="chip" data-q="エンタメ">エンタメ</button>
         <button class="chip" data-q="最新テクノロジー">テック</button>
+        <button class="chip chip-ai" id="chipAiPlaylist" type="button" data-q="__ai_playlist__">✨ AIプレイリスト</button>
         <div class="chips-extra-content">
   <a href="/proxy" class="extra-link">
     <span class="extra-text">新Elixirプロキシを利用</span>
@@ -1330,6 +1643,12 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
     document.getElementById('chipsBar').onclick = (e) => {
       const chip = e.target.closest('.chip');
       if (chip) {
+        // ✨ AI プレイリスト チップは「カテゴリ切り替え」として使わず、専用フローを起動させる
+        if (chip.dataset.q === '__ai_playlist__') {
+          // アクティブ状態は変えない（現在のタブを維持）
+          openAiPlaylistEntry();
+          return;
+        }
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
         currentPage = 0;
@@ -2133,5 +2452,771 @@ if (!currentUrl.includes("projects") && !currentUrl.includes("private") && !curr
     ライブラリ
   </button>
 </nav>
+
+<!-- ===== MIN-Pro-AI Playlist Modal ===== -->
+<div class="ai-modal-overlay" id="aiModalOverlay" role="dialog" aria-modal="true" aria-labelledby="aiModalTitleText">
+  <div class="ai-modal" id="aiModal">
+    <div class="ai-modal-header">
+      <div class="ai-logo">✨</div>
+      <div class="ai-modal-title" id="aiModalTitleText">MIN-Pro-AI プレイリスト</div>
+      <button class="ai-modal-close" type="button" onclick="closeAiModal()" aria-label="閉じる">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="ai-modal-body" id="aiModalBody"></div>
+    <div class="ai-modal-footer" id="aiModalFooter"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ====== MIN-Pro-AI Playlist Module ======
+  // ⚠ Groq API キーはユーザー指定のもの。ブラウザ側で利用するため公開キー扱いとなる点に注意。
+  const GROQ_API_KEY = "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";
+  const GROQ_MODEL   = "meta-llama/llama-4-scout-17b-16e-instruct";
+  const GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions";
+
+  // 検索エンドポイント（ユーザー指定）
+  const SEARCH_ENDPOINT = (q) => `/api/1-search?q=${encodeURIComponent(q)}`;
+
+  // 既存ライブラリストレージキー（既存コードと同じ）
+  const KEY_HISTORY   = 'mt_history';
+  const KEY_LIKED     = 'mt_liked';
+  const KEY_PLAYLISTS = 'mt_playlists';
+  const KEY_SEARCH_HISTORY = 'mt_search_history';
+
+  // 好みチップ初期候補
+  const PREF_SUGGESTIONS = [
+    'Music', 'EDM', 'HIKAKIN', 'ゲーム実況', 'アニメ', 'ボカロ',
+    'J-POP', 'ASMR', 'Vlog', 'お笑い', '料理', 'カラオケ',
+    'Mrs. GREEN APPLE', 'YOASOBI', 'マインクラフト', 'スプラトゥーン',
+    'ガジェット', 'プログラミング', 'スポーツ', 'PV/MV', '弾いてみた', 'ライブ映像'
+  ];
+
+  // システムプロンプト（ユーザー指定厳守）
+  const SYSTEM_PROMPT =
+    'あなたはユーザーの好みからYoutubeの動画のプレイリストを作成するAIです\n' +
+    '【絶対厳守ルール】\n' +
+    '1. 回答は必ず、前置きや挨拶、余計な分なしで構成してください。\n' +
+    '2. 必ず6個以上の違った動画を推薦して　動画のタイトルの終わりには必ず.をつけてこちら側がそれぞれの動画タイトルを区別できるようにして';
+
+  // ===== Utility =====
+  function libGet(key) {
+    try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+  }
+  function safeShowToast(msg) {
+    try { if (typeof showToast === 'function') return showToast(msg); } catch (_) {}
+    console.log('[AI]', msg);
+  }
+
+  // ===== Modal helpers =====
+  const overlay = () => document.getElementById('aiModalOverlay');
+  const body    = () => document.getElementById('aiModalBody');
+  const footer  = () => document.getElementById('aiModalFooter');
+  const titleEl = () => document.getElementById('aiModalTitleText');
+
+  function openAiModal() {
+    overlay().classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAiModal() {
+    overlay().classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.closeAiModal = closeAiModal;
+
+  // 背景クリック / ESC で閉じる
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'aiModalOverlay') closeAiModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay().classList.contains('open')) closeAiModal();
+  });
+
+  // ===== Entry point: chip クリックで呼ばれる =====
+  function openAiPlaylistEntry() {
+    const hist  = libGet(KEY_HISTORY);
+    const liked = libGet(KEY_LIKED);
+    const pls   = libGet(KEY_PLAYLISTS);
+    const search= libGet(KEY_SEARCH_HISTORY);
+
+    // 動画情報や検索履歴がローカルストレージに何もない場合 → 好み入力フロー
+    const hasAnyData = (hist.length + liked.length + search.length) > 0
+                       || pls.some(p => p && p.items && p.items.length > 0);
+
+    if (!hasAnyData) {
+      renderPreferenceInput();
+    } else {
+      renderChoiceScreen();
+    }
+    openAiModal();
+  }
+  window.openAiPlaylistEntry = openAiPlaylistEntry;
+
+  // ===== Screen 1A: 好みワード入力（データなし時） =====
+  function renderPreferenceInput(prefill) {
+    titleEl().textContent = '✨ MIN-Pro-AI プレイリスト';
+    const selected = new Set(prefill || []);
+    body().innerHTML = `
+      <div class="ai-modal-desc">
+        あなたの好みの単語を入力してください。<br>
+        <strong>MIN-Pro-AI</strong> が最高のプレイリストを作成します ✨
+      </div>
+      <input id="aiPrefInput" class="ai-input" type="text"
+             placeholder="例: Music, EDM, HIKAKIN, ゲーム実況 ..."
+             value="${(prefill || []).join(', ').replace(/"/g,'&quot;')}">
+      <div class="ai-modal-sub" style="margin-top:14px;">クリックで追加：</div>
+      <div class="ai-chip-row" id="aiPrefChips"></div>
+    `;
+    const chipRow = document.getElementById('aiPrefChips');
+    PREF_SUGGESTIONS.forEach(word => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ai-chip' + (selected.has(word) ? ' selected' : '');
+      b.textContent = word;
+      b.onclick = () => {
+        b.classList.toggle('selected');
+        const input = document.getElementById('aiPrefInput');
+        const cur = input.value.split(/[,、，]/).map(s => s.trim()).filter(Boolean);
+        const idx = cur.indexOf(word);
+        if (b.classList.contains('selected')) {
+          if (idx === -1) cur.push(word);
+        } else {
+          if (idx !== -1) cur.splice(idx, 1);
+        }
+        input.value = cur.join(', ');
+      };
+      chipRow.appendChild(b);
+    });
+
+    footer().innerHTML = `
+      <button class="ai-btn" type="button" onclick="closeAiModal()">キャンセル</button>
+      <button class="ai-btn primary" type="button" id="aiPrefGoBtn">
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l2.39 6.96L21.5 9.27l-5.5 4.73L17.77 21 12 17.27 6.23 21 8 14l-5.5-4.73L9.61 8.96z"/></svg>
+          プレイリストを生成
+        </span>
+      </button>
+    `;
+    document.getElementById('aiPrefGoBtn').onclick = () => {
+      const val = document.getElementById('aiPrefInput').value.trim();
+      if (!val) { safeShowToast('好みの単語を入力してください'); return; }
+      const keywords = val.split(/[,、，\n]/).map(s => s.trim()).filter(Boolean);
+      if (!keywords.length) { safeShowToast('好みの単語を入力してください'); return; }
+      runAiGeneration({ mode: 'preference', keywords });
+    };
+
+    // Enterで送信
+    document.getElementById('aiPrefInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('aiPrefGoBtn').click(); }
+    });
+  }
+
+  // ===== Screen 1B: 選択肢（データあり時） =====
+  function renderChoiceScreen() {
+    titleEl().textContent = '✨ MIN-Pro-AI プレイリスト';
+    body().innerHTML = `
+      <div class="ai-modal-desc">
+        既存の「あなたの気になる単語」からプレイリストを作成します。<br>
+        生成方法を選んでください。
+      </div>
+
+      <div class="ai-choice-card" id="aiChoiceManual">
+        <div class="ai-choice-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        </div>
+        <div>
+          <div class="ai-choice-title">気になる単語を入力する</div>
+          <div class="ai-choice-desc">自分で好きな単語を入力して AI に作らせる。</div>
+        </div>
+      </div>
+
+      <div class="ai-choice-card" id="aiChoiceAuto">
+        <div class="ai-choice-icon" style="background:linear-gradient(135deg,#a855f7,#ec4899);">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2l2.39 6.96L21.5 9.27l-5.5 4.73L17.77 21 12 17.27 6.23 21 8 14l-5.5-4.73L9.61 8.96z"/></svg>
+        </div>
+        <div>
+          <div class="ai-choice-title">MIN-Pro-AI があなたの好みを分析しプレイリストを作成します</div>
+          <div class="ai-choice-desc">視聴履歴・高評価・検索履歴・既存プレイリストから自動推薦。</div>
+        </div>
+      </div>
+    `;
+    footer().innerHTML = `
+      <button class="ai-btn" type="button" onclick="closeAiModal()">閉じる</button>
+    `;
+    document.getElementById('aiChoiceManual').onclick = () => renderPreferenceInput();
+    document.getElementById('aiChoiceAuto').onclick   = () => runAiGeneration({ mode: 'auto' });
+  }
+
+  // ===== Screen 2: ローディング（Gemini風） =====
+  const LOADER_MESSAGES = [
+    'MIN-Pro-AI があなたの好みを解析中…',
+    '最高のプレイリストを編成しています…',
+    '無数の動画から厳選しています…',
+    'タイトルを抽出して検索中…',
+    'もう少しで完成です ✨'
+  ];
+  function renderLoader(initialText) {
+    titleEl().textContent = '✨ 生成中…';
+    body().innerHTML = `
+      <div class="ai-loader-wrap">
+        <div class="ai-loader-stars">
+          <div class="ai-loader-star s1"></div>
+          <div class="ai-loader-star s2"></div>
+          <div class="ai-loader-star s3"></div>
+        </div>
+        <div class="ai-loader-text" id="aiLoaderText">${initialText || LOADER_MESSAGES[0]}</div>
+        <div class="ai-loader-sub" id="aiLoaderSub">少々お待ちください…</div>
+        <div class="ai-loader-progress"><div class="ai-loader-progress-bar" id="aiLoaderBar"></div></div>
+      </div>
+    `;
+    footer().innerHTML = '';
+  }
+  function setLoaderText(text, sub) {
+    const t = document.getElementById('aiLoaderText');
+    const s = document.getElementById('aiLoaderSub');
+    if (t && text) t.textContent = text;
+    if (s && typeof sub === 'string') s.textContent = sub;
+  }
+  function setLoaderProgress(percent) {
+    const bar = document.getElementById('aiLoaderBar');
+    if (bar) bar.style.width = Math.max(0, Math.min(100, percent)) + '%';
+  }
+
+  // ===== Screen 3: 完了 =====
+  function renderResultSuccess(playlist) {
+    titleEl().textContent = '✅ プレイリストが完成しました';
+    const items = (playlist.items || []);
+    body().innerHTML = `
+      <div class="ai-result-success">
+        <div class="ai-result-icon">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <div class="ai-result-title">「${escapeHtml(playlist.name)}」</div>
+        <div class="ai-result-sub">${items.length} 本の動画を追加しました</div>
+        <div class="ai-result-list">
+          ${items.map((it, i) => `
+            <div class="ai-result-item">
+              <div class="num">${i+1}</div>
+              <div class="ttl">${escapeHtml(it.title || '(無題)')}</div>
+            </div>
+          `).join('')}
+        </div>
+        <button class="ai-play-btn-big" type="button" id="aiPlayNowBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+          動画を再生
+        </button>
+      </div>
+    `;
+    footer().innerHTML = `
+      <button class="ai-btn" type="button" onclick="closeAiModal()">閉じる</button>
+      <button class="ai-btn" type="button" onclick="(function(){ closeAiModal(); if (typeof openDrawer==='function') openDrawer('playlistDetail','${playlist.id}'); })()">再生リストを開く</button>
+    `;
+    document.getElementById('aiPlayNowBtn').onclick = () => {
+      openAiPlayerWindow(playlist);
+    };
+  }
+
+  function renderError(message, retryFn) {
+    titleEl().textContent = '⚠ エラー';
+    body().innerHTML = `
+      <div class="ai-error-box">${escapeHtml(message)}</div>
+      <div class="ai-modal-sub">ネットワーク状況や入力内容を確認してから、もう一度お試しください。</div>
+    `;
+    footer().innerHTML = `
+      <button class="ai-btn" type="button" onclick="closeAiModal()">閉じる</button>
+      <button class="ai-btn primary" type="button" id="aiRetryBtn">もう一度</button>
+    `;
+    document.getElementById('aiRetryBtn').onclick = () => {
+      if (typeof retryFn === 'function') retryFn();
+      else openAiPlaylistEntry();
+    };
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ===== Build user prompt =====
+  function buildUserPrompt(ctx) {
+    if (ctx.mode === 'preference') {
+      const list = ctx.keywords.join(', ');
+      return (
+        'ユーザーの好みのキーワード: ' + list + '\n' +
+        'このユーザーのために、上記のキーワードを踏まえた最高のYouTube動画プレイリストを作成してください。\n' +
+        '動画タイトルだけを「タイトル1.タイトル2.タイトル3.」のように半角ピリオドで区切って6個以上返してください。'
+      );
+    }
+    // auto: ローカルストレージから素材を集約
+    const hist  = libGet(KEY_HISTORY).slice(0, 30);
+    const liked = libGet(KEY_LIKED).slice(0, 30);
+    const search= libGet(KEY_SEARCH_HISTORY).slice(0, 30);
+    const pls   = libGet(KEY_PLAYLISTS);
+
+    const histLines  = hist.map(h => `- ${h.title || ''}（${h.channel || ''}）`).join('\n');
+    const likedLines = liked.map(h => `- ${h.title || ''}（${h.channel || ''}）`).join('\n');
+    const searchLines= search.map(s => `- ${s.query || ''}`).join('\n');
+    const plLines = pls.flatMap(p => (p.items || []).slice(0,10).map(it => `- ${it.title || ''}（${it.channel || ''}）`)).slice(0, 40).join('\n');
+
+    return (
+      'あなたはこのユーザーのデータを分析するパーソナルAIです。以下の情報からユーザーの強い好みを抽出し、その嗜好に最適化された新しい動画プレイリストを作成してください。\n\n' +
+      '【視聴履歴（最新順）】\n' + (histLines || '(なし)') + '\n\n' +
+      '【高評価した動画】\n' + (likedLines || '(なし)') + '\n\n' +
+      '【検索履歴】\n' + (searchLines || '(なし)') + '\n\n' +
+      '【既存の再生リスト内の動画】\n' + (plLines || '(なし)') + '\n\n' +
+      'この情報から推測されるユーザーの趣味嗜好に沿った、まだ視聴していない・新鮮味のある動画を中心に、6個以上の異なるタイトルを「タイトル1.タイトル2.タイトル3.」の形式で、ピリオド区切りで返してください。動画タイトル以外（前置きや解説）は含めないこと。'
+    );
+  }
+
+  // ===== Groq API call =====
+  async function callGroq(userPrompt) {
+    const resp = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + GROQ_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        temperature: 0.85,
+        max_tokens: 800,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user',   content: userPrompt }
+        ]
+      })
+    });
+    if (!resp.ok) {
+      const t = await resp.text().catch(() => '');
+      throw new Error('AI 応答エラー: ' + resp.status + ' ' + (t || '').slice(0, 200));
+    }
+    const data = await resp.json();
+    const text = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if (!text || !text.trim()) throw new Error('AIから空の応答が返されました。');
+    return text.trim();
+  }
+
+  // ===== Parse titles =====
+  function parseTitles(text) {
+    // "タイトル1.タイトル2.タイトル3." 形式を期待。改行や半角/全角ピリオドにも寛容に。
+    // 番号付き (1. xxx) / 箇条書き (- xxx) の整形にも対応。
+    let raw = text.replace(/\r/g, '');
+    // 「タイトル: 」「Playlist:」みたいな見出しは捨てる
+    raw = raw.replace(/^[^\n]*[:：][ \t]*$/mg, '');
+    // 行頭の "1." "1)" "-" "・" を除去
+    raw = raw.split('\n').map(l => l.replace(/^\s*(?:\d{1,2}[\.\)）]\s*|[-・*•]\s*)/, '').trim()).join('\n');
+
+    // ピリオド（半角/全角）で分割。ただし「Mr.」「No.」みたいな略語をなるべく壊さないように。
+    // 「.+空白+大文字英字」「.+改行」を区切りとする。改行・全角句点・全角ピリオドも区切りに。
+    const parts = raw
+      .split(/(?:\.|。|．)(?=\s|$|\n)|\n+/)
+      .map(s => s.trim())
+      .map(s => s.replace(/^["'「『\u201c\u300c]+|["'」』\u201d\u300d]+$/g, '').trim())
+      .filter(Boolean)
+      // ノイズ除去
+      .filter(s => s.length >= 2 && s.length <= 120)
+      .filter(s => !/^(動画タイトル|プレイリスト|title|titles?)$/i.test(s));
+
+    // 重複排除
+    const seen = new Set();
+    const titles = [];
+    for (const p of parts) {
+      const k = p.toLowerCase();
+      if (seen.has(k)) continue;
+      seen.add(k);
+      titles.push(p);
+    }
+    return titles;
+  }
+
+  // ===== Search YouTube via /api/1-search =====
+  async function searchOne(title) {
+    try {
+      const res = await fetch(SEARCH_ENDPOINT(title), { method: 'GET' });
+      if (!res.ok) return null;
+      const data = await res.json().catch(() => null);
+      // 仕様上 1件の動画JSONが返る想定。配列で返るバックエンド差にも対応。
+      let item = null;
+      if (Array.isArray(data)) {
+        item = data.find(x => x && (x.type === 'video' || x.id)) || data[0] || null;
+      } else if (data && typeof data === 'object') {
+        if (data.items && Array.isArray(data.items)) {
+          item = data.items.find(x => x && (x.type === 'video' || x.id)) || data.items[0] || null;
+        } else {
+          item = data;
+        }
+      }
+      if (!item) return null;
+      // id 抽出（id が string、または {videoId} オブジェクト）
+      let id = null;
+      if (typeof item.id === 'string') id = item.id;
+      else if (item.id && typeof item.id === 'object') id = item.id.videoId || null;
+      else if (item.videoId) id = item.videoId;
+      if (!id) return null;
+      const channel = (item.channelTitle)
+        || (item.shortBylineText && item.shortBylineText.runs && item.shortBylineText.runs[0] && item.shortBylineText.runs[0].text)
+        || '';
+      const lengthText = (item.length && item.length.simpleText) || item.lengthText || '';
+      return {
+        id,
+        title: item.title || title,
+        channel,
+        length: lengthText,
+        isLive: !!item.isLive
+      };
+    } catch (e) {
+      console.warn('[AI] searchOne failed:', title, e);
+      return null;
+    }
+  }
+
+  // ===== Create playlist in existing localStorage structure =====
+  function createAiPlaylist(items) {
+    const pls = libGet(KEY_PLAYLISTS);
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const name = `🤖 MIN-Pro-AI Mix - ${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const pl = {
+      id: 'ai_' + Date.now().toString(),
+      name,
+      items: items.map(it => ({
+        id: it.id,
+        title: it.title,
+        channel: it.channel,
+        views: '',
+        published: '',
+        ts: Date.now()
+      })),
+      createdAt: Date.now()
+    };
+    pls.push(pl);
+    try { localStorage.setItem(KEY_PLAYLISTS, JSON.stringify(pls)); } catch (e) { console.warn(e); }
+    return pl;
+  }
+
+  // ===== Main flow =====
+  async function runAiGeneration(ctx) {
+    renderLoader('MIN-Pro-AI を呼び出しています…');
+    setLoaderProgress(5);
+
+    // ローダーメッセージを切り替えるタイマー（演出用）
+    let loaderIdx = 0;
+    const loaderTimer = setInterval(() => {
+      loaderIdx = (loaderIdx + 1) % LOADER_MESSAGES.length;
+      setLoaderText(LOADER_MESSAGES[loaderIdx]);
+    }, 1800);
+
+    try {
+      const userPrompt = buildUserPrompt(ctx);
+      setLoaderText('AIにあなたの好みを送信中…');
+      setLoaderProgress(15);
+
+      const aiText = await callGroq(userPrompt);
+      setLoaderText('AIの応答を解析中…');
+      setLoaderProgress(35);
+
+      const titles = parseTitles(aiText);
+      if (titles.length < 1) {
+        throw new Error('AIの応答からタイトルを抽出できませんでした。もう一度お試しください。');
+      }
+      // 6個以上を厳守 → 足りなくても返ってきた分は全部使う
+      const useTitles = titles.slice(0, 25);
+
+      // それぞれを /api/1-search で検索
+      const results = [];
+      let done = 0;
+      const total = useTitles.length;
+      // 軽い並列度制御（4並列）
+      const queue = useTitles.slice();
+      async function worker() {
+        while (queue.length) {
+          const t = queue.shift();
+          setLoaderText('検索中: ' + (t.length > 30 ? t.slice(0,30)+'…' : t));
+          const r = await searchOne(t);
+          done++;
+          setLoaderProgress(35 + Math.round((done / total) * 60));
+          if (r) results.push(r);
+        }
+      }
+      await Promise.all([worker(), worker(), worker(), worker()]);
+
+      // 動画ID重複排除（順序維持）
+      const seen = new Set();
+      const uniq = [];
+      for (const r of results) {
+        if (!r || !r.id || seen.has(r.id)) continue;
+        seen.add(r.id);
+        uniq.push(r);
+      }
+      if (!uniq.length) throw new Error('動画が1本も見つかりませんでした。検索エンドポイントを確認してください。');
+
+      setLoaderProgress(98);
+      setLoaderText('プレイリストを保存中…');
+
+      const pl = createAiPlaylist(uniq);
+      setLoaderProgress(100);
+      clearInterval(loaderTimer);
+
+      // 完了画面
+      setTimeout(() => renderResultSuccess(pl), 350);
+
+    } catch (err) {
+      clearInterval(loaderTimer);
+      console.error('[AI] generation error', err);
+      renderError((err && err.message) ? err.message : '不明なエラーが発生しました。', () => {
+        // リトライ：同じ ctx で再実行
+        runAiGeneration(ctx);
+      });
+    }
+  }
+
+  // ===== Player window (新しいタブで開く) =====
+  // blob: で開くと YouTube 側に embed をブロックされる場合があるため about:blank の新規ウィンドウを使用。
+  function openAiPlayerWindow(playlist) {
+    const w = window.open('about:blank', '_blank');
+    if (!w) {
+      safeShowToast('ポップアップがブロックされました。許可してから再度お試しください。');
+      return;
+    }
+    const safe = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
+    })[c]);
+    const itemsJson = JSON.stringify(playlist.items.map(it => ({
+      id: it.id, title: it.title || '', channel: it.channel || ''
+    })));
+    const plName = safe(playlist.name);
+
+    const html = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>${plName} - MIN-Tube Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0f0f0f; --surface:#1c1c1c; --card:#262626; --text:#f1f1f1; --muted:#aaa; --accent:#a855f7; --border:#333; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; height:100%; }
+  .wrap { display:flex; height:100vh; }
+  .player-pane { flex:1; min-width:0; display:flex; flex-direction:column; background:#000; }
+  .player-frame { flex:1; min-height:0; position:relative; }
+  .player-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; background:#000; }
+  .now-bar { padding:14px 18px; background: var(--surface); border-top:1px solid var(--border); }
+  .now-title { font-size:16px; font-weight:700; margin:0 0 4px; line-height:1.4; }
+  .now-channel { font-size:13px; color: var(--muted); margin:0; }
+  .now-controls { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .ctrl-btn { background: var(--card); color: var(--text); border:1px solid var(--border); border-radius:8px; padding:7px 13px; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .ctrl-btn:hover { background:#333; }
+  .ctrl-btn.primary { background: linear-gradient(120deg,#4f8cff,#a855f7,#ec4899); border:none; color:#fff; font-weight:600; }
+  .list-pane { width: 360px; background: var(--surface); border-left:1px solid var(--border); display:flex; flex-direction:column; }
+  .list-header { padding:14px 16px; border-bottom:1px solid var(--border); }
+  .list-title { font-size:14px; font-weight:700; margin:0; }
+  .list-meta  { font-size:12px; color: var(--muted); margin-top:3px; }
+  .list-body  { flex:1; overflow-y:auto; padding:6px; }
+  .pl-item {
+    display:flex; gap:10px; padding:8px; border-radius:10px; cursor:pointer; align-items:center;
+    transition: background 0.1s;
+  }
+  .pl-item:hover { background: rgba(255,255,255,0.05); }
+  .pl-item.active { background: rgba(168,85,247,0.18); }
+  .pl-thumb {
+    position: relative; width:108px; min-width:108px; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+    background:#000;
+  }
+  .pl-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .pl-thumb .badge {
+    position:absolute; left:4px; top:4px;
+    background: rgba(0,0,0,0.75); color:#fff; font-size:10px;
+    padding:2px 5px; border-radius:4px; font-weight:600;
+  }
+  .pl-thumb .play-now {
+    position:absolute; right:4px; bottom:4px;
+    background: var(--accent); color:#fff; font-size:10px; padding:2px 6px;
+    border-radius:4px; font-weight:600; display:none;
+  }
+  .pl-item.active .pl-thumb .play-now { display:inline-block; }
+  .pl-info { flex:1; min-width:0; }
+  .pl-info .t { font-size:13px; font-weight:500; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .pl-info .c { font-size:12px; color: var(--muted); margin-top:3px; }
+  .topbar {
+    display:flex; align-items:center; gap:10px; padding:10px 16px;
+    background: var(--surface); border-bottom:1px solid var(--border);
+  }
+  .brand {
+    font-weight:700; font-size:14px;
+    background: linear-gradient(120deg,#4f8cff,#a855f7,#ec4899);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .pl-name { font-size:13px; color: var(--muted); margin-left:auto; }
+  @media (max-width: 820px) {
+    .wrap { flex-direction: column; }
+    .list-pane { width:100%; height:42vh; border-left:none; border-top:1px solid var(--border); }
+    .player-pane { height:58vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="player-pane">
+      <div class="topbar">
+        <div class="brand">✨ MIN-Pro-AI Player</div>
+        <div class="pl-name" id="plNameTop"></div>
+      </div>
+      <div class="player-frame">
+        <iframe id="ytFrame"
+                src=""
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <div class="now-bar">
+        <p class="now-title" id="nowTitle"></p>
+        <p class="now-channel" id="nowChannel"></p>
+        <div class="now-controls">
+          <button class="ctrl-btn" id="btnPrev">◀ 前へ</button>
+          <button class="ctrl-btn primary" id="btnNext">次へ ▶</button>
+          <button class="ctrl-btn" id="btnShuffle">🔀 シャッフル</button>
+          <button class="ctrl-btn" id="btnAutoplay">🔁 自動再生: ON</button>
+        </div>
+      </div>
+    </div>
+    <aside class="list-pane">
+      <div class="list-header">
+        <p class="list-title" id="plListTitle"></p>
+        <p class="list-meta"  id="plListMeta"></p>
+      </div>
+      <div class="list-body" id="plListBody"></div>
+    </aside>
+  </div>
+
+<\u0073cript>
+(function() {
+  var items   = ${itemsJson};
+  var plName  = ${JSON.stringify(playlist.name)};
+  var idx     = 0;
+  var autoplay = true;
+
+  var frame    = document.getElementById('ytFrame');
+  var listBody = document.getElementById('plListBody');
+  var nowT     = document.getElementById('nowTitle');
+  var nowC     = document.getElementById('nowChannel');
+  document.getElementById('plListTitle').textContent = plName;
+  document.getElementById('plListMeta').textContent  = items.length + ' 本の動画';
+  document.getElementById('plNameTop').textContent   = plName;
+  document.title = plName + ' - MIN-Tube Player';
+
+  function thumb(id) { return 'https://i.ytimg.com/vi/' + id + '/mqdefault.jpg'; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\\'':'&#39;'})[c]; }); }
+
+  function renderList() {
+    listBody.innerHTML = items.map(function(it, i) {
+      return '<div class="pl-item' + (i===idx?' active':'') + '" data-i="'+i+'">'
+        + '<div class="pl-thumb">'
+        +   '<img src="'+thumb(it.id)+'" alt="" loading="lazy" onerror="this.style.opacity=0.2">'
+        +   '<span class="badge">'+(i+1)+'</span>'
+        +   '<span class="play-now">▶ 再生中</span>'
+        + '</div>'
+        + '<div class="pl-info">'
+        +   '<div class="t">'+esc(it.title)+'</div>'
+        +   '<div class="c">'+esc(it.channel)+'</div>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+    Array.prototype.forEach.call(listBody.querySelectorAll('.pl-item'), function(el){
+      el.addEventListener('click', function(){
+        var i = parseInt(el.getAttribute('data-i'), 10);
+        if (!isNaN(i)) play(i);
+      });
+    });
+    var active = listBody.querySelector('.pl-item.active');
+    if (active && active.scrollIntoView) active.scrollIntoView({ block:'nearest', behavior:'smooth' });
+  }
+
+  function play(i) {
+    if (i < 0 || i >= items.length) return;
+    idx = i;
+    var it = items[i];
+    // youtube-nocookie 埋め込み + enablejsapi + autoplay
+    var params = [
+      'autoplay=' + (autoplay ? 1 : 0),
+      'rel=0',
+      'modestbranding=1',
+      'playsinline=1',
+      'enablejsapi=1',
+      'origin=' + encodeURIComponent(location.origin)
+    ].join('&');
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(it.id) + '?' + params;
+    nowT.textContent = it.title || '';
+    nowC.textContent = it.channel || '';
+    renderList();
+  }
+
+  function next() { play(idx + 1 >= items.length ? 0 : idx + 1); }
+  function prev() { play(idx - 1 < 0 ? items.length - 1 : idx - 1); }
+  function shuffle() {
+    for (var i = items.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = items[i]; items[i] = items[j]; items[j] = t;
+    }
+    play(0);
+  }
+
+  document.getElementById('btnNext').onclick = next;
+  document.getElementById('btnPrev').onclick = prev;
+  document.getElementById('btnShuffle').onclick = shuffle;
+  document.getElementById('btnAutoplay').onclick = function() {
+    autoplay = !autoplay;
+    this.textContent = '🔁 自動再生: ' + (autoplay ? 'ON' : 'OFF');
+  };
+
+  // YouTube iframe API のメッセージで動画終了を検知して次へ
+  window.addEventListener('message', function(ev) {
+    if (!ev || !ev.data) return;
+    try {
+      var data = (typeof ev.data === 'string') ? JSON.parse(ev.data) : ev.data;
+      if (data && data.event === 'onStateChange' && data.info === 0 && autoplay) {
+        next();
+      }
+    } catch (e) { /* ignore */ }
+  });
+
+  // iframe load 時に listening を送って状態変化を購読
+  frame.addEventListener('load', function() {
+    try {
+      frame.contentWindow.postMessage(JSON.stringify({ event: 'listening' }), '*');
+      frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }), '*');
+    } catch (e) {}
+  });
+
+  // 初期再生
+  if (items.length) play(0);
+  else {
+    nowT.textContent = '動画がありません';
+  }
+})();
+<\/script>
+</body>
+</html>`;
+
+    try {
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+    } catch (e) {
+      console.error('player window write failed', e);
+      safeShowToast('プレーヤーの起動に失敗しました');
+    }
+  }
+  window.openAiPlayerWindow = openAiPlayerWindow;
+
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
