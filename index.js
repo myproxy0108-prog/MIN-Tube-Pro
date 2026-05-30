@@ -625,25 +625,10 @@ const streamEmbedPlaceholder = `<div style="width:100%;height:100%;display:flex;
             </div>
             <div class="description-show-more" id="descriptionToggleBtn">全文を表示</div>
         </div>
-     <div class="comments-section">
-    <h3>コメント <span id="comment-count-num">${commentsData.commentCount}</span> 件</h3>
-    <div id="comment-list-container">
-        ${commentsData.comments.map(c => `
-            <div class="comment-item">
-                <img class="comment-avatar" src="${c.authorThumbnails?.[0]?.url || ''}">
-                <div>
-                    <span class="comment-author">${c.author}</span>
-                    <div style="font-size:14px;">${c.content}</div>
-                </div>
-            </div>`).join('')}
-    </div>
-    ${commentsData.continuation ? `
-        <button id="load-more-comments" onclick="loadMoreComments('${videoId}', '${commentsData.continuation}')" 
-                style="width:100%; padding:10px; background:var(--bg-secondary); color:white; border:none; border-radius:8px; cursor:pointer; margin-top:10px;">
-            コメントをもっと読み込む
-        </button>
-    ` : ''}
-</div>
+        <div class="comments-section">
+            <h3>コメント ${commentsData.commentCount} 件</h3>
+            ${commentsData.comments.map(c => `<div class="comment-item"><img class="comment-avatar" src="${c.authorThumbnails?.[0]?.url || ''}"><div><span class="comment-author">${c.author}</span><div style="font-size:14px;">${c.content}</div></div></div>`).join('')}
+        </div>
     </div>
     <div class="sidebar">
         <div id="recommendations"></div>
@@ -866,40 +851,6 @@ const streamEmbedPlaceholder = `<div style="width:100%;height:100%;display:flex;
             btn.textContent = '一部を表示';
         }
     }
-    async function loadMoreComments(vId, token) {
-    const btn = document.getElementById('load-more-comments');
-    btn.disabled = true;
-    btn.innerText = "読み込み中...";
-
-    try {
-        const res = await fetch(`/api/comments/${vId}?continuation=${encodeURIComponent(token)}`);
-        const data = await res.json();
-        const container = document.getElementById('comment-list-container');
-
-        if (data.comments && data.comments.length > 0) {
-            const html = data.comments.map(c => `
-                <div class="comment-item">
-                    <img class="comment-avatar" src="${c.authorThumbnails?.[0]?.url || ''}">
-                    <div>
-                        <span class="comment-author">${c.author}</span>
-                        <div style="font-size:14px;">${c.content}</div>
-                    </div>
-                </div>`).join('');
-            container.insertAdjacentHTML('beforeend', html);
-        }
-
-        if (data.continuation) {
-            // ボタンのonclick属性を新しいトークンで更新
-            btn.onclick = () => loadMoreComments(vId, data.continuation);
-            btn.disabled = false;
-            btn.innerText = "コメントをもっと読み込む";
-        } else {
-            btn.remove(); // 続きがなければ削除
-        }
-    } catch (e) {
-        btn.innerText = "読み込み失敗";
-    }
-}
 </script>
 </body>
 </html>
