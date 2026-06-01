@@ -608,5 +608,20 @@
     "tags": ["アクション", "リズム", "激ムズ"],
     "isNew": true,
     "status": "done"
+  },
+  {
+    "key": "chiikawa",
+    "name": "Chiikawa Pazzle",
+    "emoji": "🐇",
+    "sub": "アクション · リズム",
+    "file": "fun/Chi.html",
+    "image": "img/Chi.jpeg",
+    "desc": "死ぬwwww",
+    "genre": "Pazzle",
+    "genreLabel": "パズル",
+    "players": "1人プレイ",
+    "tags": ["アクション", "リズム", "パズル"],
+    "isNew": true,
+    "status": "done"
   }
 ]
